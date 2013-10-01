@@ -654,7 +654,7 @@ recordify(Row, #statement{columns = Cols} = Pgstatement, RecName, RecInfo) ->
     end.
 
 proplistify(Row, #statement{columns = Cols}) ->
-    ColNames = [binary_to_atom(Name, utf8) || #column{name = Name} <- Cols],
+    ColNames = [binary_to_atom(Name, latin1) || #column{name = Name} <- Cols],
     lists:zip(ColNames, tuple_to_list(Row)).
 
 drop_last_column(#statement{columns = Cols} = Pgstatement) ->
