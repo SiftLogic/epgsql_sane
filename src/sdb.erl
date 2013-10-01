@@ -407,10 +407,10 @@ convert_filters(Filters, NumberOfArgs, FieldsToFilter) ->
                       case case Type of
                                date ->
                                    normalize_timestamp:date(
-                                     Condition, ymd);
+                                     binary_to_list(Condition), ymd);
                                timestamptz ->
                                    normalize_timestamp:datetime(
-                                     Condition, utc, ts_ymd);
+                                     binary_to_list(Condition), utc, ts_ymd);
                                varchararray ->
                                    {ok, binary:split(
                                           Condition, <<",">>, [global])};
