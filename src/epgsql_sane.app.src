@@ -1,0 +1,14 @@
+%% -*- Erlang -*-
+{application, epgsql_sane,
+ [
+  {description, "Epgsql wrapper"},
+  {vsn, git},
+  {modules,
+   [
+   ]},
+  {applications,
+   [
+    epgsql,
+    epgsql_pool
+   ]},
+  {env, []}]}.
