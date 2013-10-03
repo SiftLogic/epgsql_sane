@@ -81,7 +81,7 @@ accessor functions are available.
 >     case bquery("INSERT INTO foo"
 >                 "  (bar, baz)"
 >                 "  VALUES"
->                 "  ($1, $1)"
+>                 "  ($1, $2)"
 >                 "  RETURNING foo_id",
 >                 [{Foo, int4},
 >                  {Bar, text}],
