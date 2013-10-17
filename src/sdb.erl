@@ -432,18 +432,41 @@ convert_filters(Filters, NumberOfArgs, FieldsToFilter) ->
                                           _ -> ""
                                       end,
                                       case Operator of
+                                          %% case Sensitive LIKE
+                                          starts_with -> " LIKE (";
+                                          ends_with -> " LIKE (";
+                                          contains -> " LIKE (";
+                                          %% case inSensitive LIKE
+                                          istarts_with -> " ILIKE (";
+                                          iends_with -> " ILIKE (";
+                                          icontains -> " ILIKE (";
+                                          %% array operators
+                                          one_of -> " = ANY(";
+                                          overlap -> " && ARRAY[";
+                                          %% general comparison operators
                                           equals -> " = (";
                                           less_than -> " < (";
                                           less_or_equal -> " <= (";
-                                          greater_or_equal -> " >= (";
-                                          one_of -> " = ANY(";
-                                          overlap -> " && ARRAY["
+                                          greater_than -> " > (";
+                                          greater_or_equal -> " >= ("
                                       end, "$", integer_to_list(N),
                                       case Operator of
                                           overlap -> "]";
                                           _ -> ")"
                                       end],
-                                     {Normalized, Type}} | Acc]};
+                                     {case Operator of
+                                          _ when Operator =:= istarts_with;
+                                                 Operator =:= starts_with ->
+                                              <<Normalized/binary, "%">>;
+                                          _ when Operator =:= iends_with;
+                                                 Operator =:= ends_with ->
+                                              <<"%", Normalized/binary>>;
+                                          _ when Operator =:= icontains;
+                                                 Operator =:= contains ->
+                                              <<"%", Normalized/binary, "%">>;
+                                          _ ->
+                                              Normalized
+                                      end, Type}} | Acc]};
                           {error, _Error} ->
                               {error, {conversion_failed, Condition, Type}}
                       end
