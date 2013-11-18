@@ -931,7 +931,7 @@ prettify_query(Query, Args, ArgTypes) ->
 prettify_query(Query) ->
     re:replace(Query, "([^\\s]) {2}", "\\1\n  ", [global, {return, binary}]).
 
-format_type(Type, null) -> io_lib:format("NULL::~s", [Type]);
+format_type(Type, null) -> io_lib:format("NULL::~s", [type_to_array_type(Type)]);
 format_type(bool, true) -> "TRUE";
 format_type(bool, false) -> "FALSE";
 format_type(boolean, true) -> "TRUE";
@@ -990,6 +990,12 @@ format_array(Type, L) ->
                         "") || X <- L],
                      ","),
                    Type]).
+
+type_to_array_type(T) ->
+    case lists:reverse(atom_to_list(T)) of
+        "yarra" ++ H -> lists:reverse(H) ++ "[]";
+        _ -> T
+    end.
 
 %% format_type(time = Type, B)                      -> ?datetime:encode(Type, B);
 %% format_type(timetz = Type, B)                    -> ?datetime:encode(Type, B);
