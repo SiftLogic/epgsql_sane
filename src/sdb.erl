@@ -451,7 +451,15 @@ convert_filters(Filters, NumberOfArgs, FieldsToFilter) ->
                                           greater_or_equal -> " >= ("
                                       end, "$", integer_to_list(N),
                                       case Operator of
-                                          overlap -> "]";
+                                          overlap ->
+                                              ["]",
+                                               case Type of
+                                                   int4 -> "::int4[]";
+                                                   int8 -> "::int8::[]";
+                                                   varchar -> "::varchar[]";
+                                                   text -> "::text[]";
+                                                   _ -> ""
+                                               end];
                                           _ -> ")"
                                       end],
                                      {case Operator of
