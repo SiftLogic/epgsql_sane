@@ -34,7 +34,7 @@ then your database accessor module should start with
 -export([foobar/0]).
 
 -define(SDB_POOL_NAME, foo_db).
--include("../../smlib/include/sdb.hrl").
+-include_lib("epgsql_sane/include/sdb.hrl").
 
 foobar() ->
     [...]
